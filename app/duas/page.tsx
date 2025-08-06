@@ -121,20 +121,21 @@ export default function DuasPage() {
     return allTags.filter(() => Math.random() > 0.7);
   };
 
-  const duasData = useMemo(() => generateDuasData(), []);
+ const duasData = useMemo(() => generateDuasData(), []);
 
-  // Update category counts
-  const categoriesWithCounts = useMemo(() => {
-    const counts = {};
-    duasData.forEach(dua => {
-      counts[dua.category] = (counts[dua.category] || 0) + 1;
-    });
-    
-    return categories.map(cat => ({
-      ...cat,
-      count: cat.id === 'all' ? duasData.length : (counts[cat.id] || 0)
-    }));
-  }, [duasData]);
+const categoriesWithCounts = useMemo(() => {
+  const counts: { [key: string]: number } = {};
+  
+  duasData.forEach(dua => {
+    counts[dua.category] = (counts[dua.category] || 0) + 1;
+  });
+
+  return categories.map(cat => ({
+    ...cat,
+    count: cat.id === 'all' ? duasData.length : (counts[cat.id] || 0)
+  }));
+}, [duasData]);
+
 
   const filteredDuas = useMemo(() => {
     return duasData.filter(dua => {
